@@ -1,0 +1,108 @@
+package com.ifpb30_01_16.projeto_3bimestre.Views;
+
+import android.net.Uri;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.ifpb30_01_16.projeto_3bimestre.R;
+import com.ifpb30_01_16.projeto_3bimestre.controlador.ControladorUsuario;
+import com.ifpb30_01_16.projeto_3bimestre.model.IMC;
+import com.ifpb30_01_16.projeto_3bimestre.model.ValorCaloricoTotal;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import butterknife.Bind;
+
+public class IMCActivity extends AppCompatActivity {
+
+    @Bind(R.id.tv_peso)
+    EditText mTv_peso;
+
+    @Bind(R.id.tv_altura)
+    EditText mTv_altura;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_imc);
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_login, menu);
+
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        ValorCaloricoTotal perfil = null;
+
+        switch (item.getItemId()) {
+
+            case R.id.item_submit:
+                enviarIMC();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void enviarIMC() {
+        IMC perfil = new IMC();
+
+        perfil.setPeso(mTv_altura.getText() == null ? 0 : Integer.parseInt(mTv_altura.getText().toString()));
+        perfil.setAltura(mTv_peso.getText() == null ? 0 : Integer.parseInt(mTv_peso.getText().toString()));
+        Toast.makeText(this, "IMC Enviado com Sucesso", Toast.LENGTH_SHORT).show();
+
+        //perfil.setResultado(mTv_peso / mTv_altura);
+
+        String json = gerarJson(perfil);
+        callServerImc(json);
+
+
+    }
+
+    private String gerarJson(IMC imc) {
+        JSONObject jsonObject = new JSONObject();
+
+        try {
+            jsonObject.put("peso", imc.getPeso());
+            jsonObject.put("altura", imc.getAltura());
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return (jsonObject.toString());
+    }
+
+
+
+
+    private void callServerImc(final String data) {
+        final ControladorUsuario controladorUsuario = new ControladorUsuario(this);
+
+
+                controladorUsuario.execute(": ladoss.com.br:8443/NutrIF_service/calcularIMC", data);
+
+        }
+
+
+}
