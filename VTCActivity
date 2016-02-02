@@ -1,0 +1,103 @@
+package com.ifpb30_01_16.projeto_3bimestre.Views;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.ifpb30_01_16.projeto_3bimestre.R;
+import com.ifpb30_01_16.projeto_3bimestre.controlador.ControladorUsuario;
+import com.ifpb30_01_16.projeto_3bimestre.model.ValorCaloricoTotal;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+public class VTCActivity extends AppCompatActivity {
+    @Bind(R.id.edt_vct_weight)
+    EditText mEdt_vct_weight;
+
+    @Bind(R.id.edt_vct_height)
+    EditText mEdt_vcy_height;
+
+    @Bind(R.id.spn_vct_level)
+    Spinner mSpn_vct_level;
+
+    @Bind(R.id.edt_birth_day)
+    EditText mEdt_birth_day;
+
+    @Bind (R.id.edt_sexo)
+    EditText mEdt_sexo;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_vtc);
+
+        ButterKnife.bind(this);
+
+
+        List<String> mList = new ArrayList<>();
+        mList.add("0");
+        mList.add("1");
+        mList.add("2");
+        mList.add("3");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, mList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpn_vct_level.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_login, menu);
+
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        ValorCaloricoTotal perfil = null;
+
+        switch (item.getItemId()) {
+
+            case R.id.item_submit:
+                enviarVCT();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void enviarVCT() {
+       ValorCaloricoTotal perfil = new ValorCaloricoTotal(null);
+
+        perfil.setPeso(mEdt_vct_weight.getText() == null ? "" : mEdt_vct_weight.getText().toString());
+        perfil.setAltura(mEdt_vcy_height.getText() == null ? "" : mEdt_vcy_height.getText().toString());
+        perfil.setDataDeNascimento(mEdt_birth_day.getText() == null ? "" : mEdt_birth_day.getText().toString());
+        perfil.setSexo(mEdt_sexo.getText() == null ? "" : mEdt_sexo.getText().toString());
+        perfil.setNivel(mSpn_vct_level.getOnItemSelectedListener() == null ? "" : mSpn_vct_level.getOnItemSelectedListener().toString());
+        Toast.makeText(VTCActivity.this, "VCT Enviado com Sucesso", Toast.LENGTH_SHORT).show();
+
+    }
+
+
+    private void callServerVtc(final String data){
+        final ControladorUsuario controladorUsuario = new ControladorUsuario(this);
+
+
+                controladorUsuario.execute(": ladoss.com.br:8443/NutrIF_service/calcularVCT",data);
+
+    }
+}
