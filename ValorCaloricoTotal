@@ -1,0 +1,107 @@
+package com.ifpb30_01_16.projeto_3bimestre.model;
+
+public class ValorCaloricoTotal {
+//perfil VTC
+
+    private String peso;
+    private String altura;
+    private String dataDeNascimento;
+    private String sexo;
+    private String nivel;
+
+    public String getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(String nivel) {
+        this.nivel = nivel;
+    }
+
+    public ValorCaloricoTotal(String peso, String altura, String dataDeNascimento, String sexo, String nivel) {
+        this.peso = peso;
+        this.altura = altura;
+        this.dataDeNascimento = dataDeNascimento;
+        this.sexo = sexo;
+        this.nivel = nivel;
+    }
+
+    public ValorCaloricoTotal(String nivel) {
+        this.nivel = nivel;
+
+    }
+
+    public ValorCaloricoTotal(String peso, String altura, String dataDeNascimento, String sexo) {
+        this.peso = peso;
+        this.altura = altura;
+        this.dataDeNascimento = dataDeNascimento;
+        this.sexo = sexo;
+    }
+
+    public String getPeso() {
+        return peso;
+    }
+
+    public void setPeso(String peso) {
+        this.peso = peso;
+    }
+
+    public String getAltura() {
+        return altura;
+    }
+
+    public void setAltura(String altura) {
+        this.altura = altura;
+    }
+
+    public String getDataDeNascimento() {
+        return dataDeNascimento;
+
+    }
+
+    public void setDataDeNascimento(String dataDeNascimento) {
+        this.dataDeNascimento = dataDeNascimento;
+    }
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ValorCaloricoTotal)) return false;
+
+        ValorCaloricoTotal that = (ValorCaloricoTotal) o;
+
+        if (getPeso() != null ? !getPeso().equals(that.getPeso()) : that.getPeso() != null)
+            return false;
+        if (getAltura() != null ? !getAltura().equals(that.getAltura()) : that.getAltura() != null)
+            return false;
+        if (getDataDeNascimento() != null ? !getDataDeNascimento().equals(that.getDataDeNascimento()) : that.getDataDeNascimento() != null)
+            return false;
+        if (getSexo() != null ? !getSexo().equals(that.getSexo()) : that.getSexo() != null)
+            return false;
+        return !(getNivel() != null ? !getNivel().equals(that.getNivel()) : that.getNivel() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "ValorCaloricoTotal{" +
+                "peso='" + peso + '\'' +
+                ", altura='" + altura + '\'' +
+                ", dataDeNascimento='" + dataDeNascimento + '\'' +
+                ", sexo='" + sexo + '\'' +
+                ", nivel='" + nivel + '\'' +
+                '}';
+    }
+}
