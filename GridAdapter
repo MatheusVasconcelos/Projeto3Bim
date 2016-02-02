@@ -1,0 +1,43 @@
+package com.ifpb30_01_16.projeto_3bimestre.adapter;
+
+import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+
+public class GridAdapter extends BaseAdapter {
+    private Context context;
+    private int[] list;
+
+    public GridAdapter(Context context, int[] list) {
+        this.context = context;
+        this.list = list;
+    }
+
+    @Override
+    public int getCount() {
+        return list.length;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return list[position];
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        ImageView imageView = new ImageView(context);
+        imageView.setImageResource(list[position]);
+        imageView.setAdjustViewBounds(true);
+
+        return imageView;
+
+    }
+}
