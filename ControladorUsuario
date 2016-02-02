@@ -1,0 +1,107 @@
+package com.ifpb30_01_16.projeto_3bimestre.controlador;
+
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import com.ifpb30_01_16.projeto_3bimestre.Interface.SistemaCallback;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+public class ControladorUsuario  extends AsyncTask<String, Void, String>{
+
+    private Context context;
+    private ProgressDialog dialog;
+
+    SistemaCallback sistemaCallback;
+
+    public ControladorUsuario(Context context) {
+        this.context = context;
+    }
+
+
+    @Override
+    protected void onPreExecute(){
+        dialog = new ProgressDialog(context);
+        dialog.setMessage("Carregando Dados...");
+        dialog.show();
+
+    }
+
+
+    @Override
+    protected String doInBackground(String... params) {
+
+        String resultado = "";
+        BufferedReader bufferedReader;
+
+
+        try {
+            URL url = new URL(params[0]);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setDoInput(true);
+            connection.connect();
+
+            StringBuilder builder = new StringBuilder();
+            bufferedReader = new BufferedReader
+                    (new InputStreamReader(connection.getInputStream()));
+
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                builder.append(line + "\n");
+
+            }
+
+            resultado = builder.toString();
+            Log.i("Asynctask", resultado);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return resultado;
+    }
+
+    public void notificacaoErro(String mensagem) {
+
+        sistemaCallback.erroServicoDemandas(mensagem);
+    }
+
+
+
+
+
+
+    @Override
+    protected void onPostExecute(String resultado){
+
+
+        if (resultado == null) {
+            notificacaoErro("Requisição sem resultados");
+        } else {
+            try {
+                JSONArray jsonArray = new JSONArray(resultado);
+            } catch (JSONException e) {
+
+                notificacaoErro(e.getMessage());
+            }
+        }
+        dialog.dismiss();
+    }
+
+}
